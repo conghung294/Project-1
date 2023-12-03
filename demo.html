@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+    <link rel="stylesheet" href="./style.css">
+    <title>Project 1</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Tính toán biểu thức</h1>
+      <div class="help">
+        <ul>
+          <li>
+            <b>Toán tử hợp lệ:</b>
+            <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>,
+            <code>^</code>
+          </li>
+          <li>
+            <b>Các hàm hỗ trợ:</b>
+          
+            <code title="Trả về căn bậc 2 của a">SQRT(a)</code>,
+           
+            <code title="Trả về sin(a)">SIN(a)</code>,
+            <code title="Trả về sin(a)">COS(a)</code>,
+            <code title="Trả về sin(a)">TAN(a)</code>,
+            <code title="Trả về sin(a)">COT(a)</code>,
+            <code title="Trả về logarit cơ số a của b">LOG(a,b)</code>
+          </li>
+          <li>
+            <b>Biến mặc định:</b>
+            <code title="Pi=3.141592653">PI</code>,
+            <code title="E=2.71828182845">E</code>,
+            <code title="Biến X">X</code>
+          </li>
+        </ul>
+      </div>
+
+      <div class="evaluator">
+        <form action="javascript:void(0);" class="input-wrapper wrapper block">
+          <div class="input-user">
+            <input type="text" placeholder="Nhập biểu thức..." id="input" autofocus />
+          </div>
+          <div class="input-user">
+            <input type="text" placeholder="Nhập giá trị của X:" id="input2" />
+          </div>
+          <button class="submit-btn"> Tính kết quả </button>
+          <p>Tìm nghiệm của phương trình trong khoảng từ </p>
+          <div class="input-user">
+            <input type="text" placeholder="Nhập giá trị bắt đầu:" id="input3"/>
+          </div>
+         <div class="input-user">
+          <input type="text" placeholder="Nhập giá trị kết thúc:" id="input4"/>
+         </div>
+          <button class="submit-btn2"> Tìm X</button>
+        </form>
+         
+        <div class="output card fixed block">
+          <div class="env-wrapper"> <span id="env"></span></div>
+          <div class="output-display">
+            <span class="output-val" id="output"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script  src="./main.js"></script>
+
+  </body>
+</html>
