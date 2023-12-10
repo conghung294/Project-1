@@ -1,12 +1,12 @@
 let value1;
 let value2;
-let ketqua;
+const count = 50;
 const inputElement = document.querySelector("#input");
 const inputElement2 = document.querySelector("#input2");
 const inputElement3 = document.querySelector("#input3");
 const inputElement4 = document.querySelector("#input4");
 const outputElement = document.querySelector("#output");
-const envElement = document.querySelector("#env");
+// const envElement = document.querySelector("#env");
 const submitBtn = document.querySelector(".submit-btn");
 const submitBtn2 = document.querySelector(".submit-btn2");
 
@@ -202,9 +202,7 @@ function apply(func, stack) {
   if (func === "LOG") {
     const b = stack.pop();
     const a = stack.pop();
-    if((a<=0)||(b<=0)||(a==1)){
-      // outputElement.innerText='Kiểm '
-     
+    if (a <= 0 || b <= 0 || a == 1) {
       return;
     }
     return Math.log(b) / Math.log(a);
@@ -216,58 +214,22 @@ function evaluate(input) {
   return evalRPN(toRPN(tokenize(input)));
 }
 
-
-
-
-function bisection(a, b, tol) {
-  
-  environment.X=a;
-  let m =evaluate(inputElement.value)
-  environment.X=b;
-  let p =evaluate(inputElement.value)
-  if(m*p>=0){
-    
-    return;
-  }
-  let c = a;
-  while (b - a >= tol) {
-    c = (a + b) / 2;
- 
-  environment.X=c;
-  let n =evaluate(inputElement.value)
-    if (n === 0) break;
-    else if (m*n < 0) b = c;
-    else a = c;
-  }
-  environment.X=c;
-  if(evaluate(inputElement.value)>1){
-    return;
-  }
-  return c;
-}
-
 submitBtn.onclick = () => {
-  if(inputElement2.value==='E'){
-    environment.X=Math.E;
-
-  }
-  else if(inputElement2.value==='PI'){
-    environment.X=Math.PI;
-  }
- 
-  else {
-    environment.X = inputElement2.value * 1 ;
+  if (inputElement2.value === "E") {
+    environment.X = Math.E;
+  } else if (inputElement2.value === "PI") {
+    environment.X = Math.PI;
+  } else {
+    environment.X = inputElement2.value * 1;
   }
 
- if(!evaluate(inputElement.value)){
-  outputElement.innerText= 'Kiểm tra lại giá trị đầu vào'
- }
- else {
-  outputElement.innerText = `Giá trị của biểu thức là: ${evaluate(
-    inputElement.value
-  ).toFixed(7)} `;
- }
-  
+  if (!evaluate(inputElement.value) && evaluate(inputElement.value) != 0) {
+    outputElement.innerText = "Kiểm tra lại giá trị đầu vào";
+  } else {
+    outputElement.innerText = `Giá trị của biểu thức là: ${evaluate(
+      inputElement.value
+    ).toFixed(7)} `;
+  }
 };
 
 inputElement3.onchange = (event) => {
@@ -277,37 +239,76 @@ inputElement3.onchange = (event) => {
 inputElement4.onchange = (event) => {
   value2 = event.target.value * 1;
 };
-submitBtn2.onclick = function caculatorX() {
-  let step = 1 / 256;
-  environment.X= value1 ;
-  // let valueBegin = evaluate(inputElement.value);
 
-  // if (valueBegin === 0) {
-  //   outputElement.innerText = `Nghiệm của phương trình là X1 =${value1}`;
-  // }
-  for (let i = value1; i < value2; i += step) {
-   
-    environment.X = i;
-    let stampValue = evaluate(inputElement.value);
-  
-    environment.X= i+step;
-    let stampValue2 = evaluate(inputElement.value);
-   
-  
-    if (stampValue === 0) {
-      outputElement.innerText = `Nghiệm của phương trình là X= ${i}`;
-      return;
-    } else if (stampValue2 * stampValue < 0) {
-      ketqua = bisection(i, i+step, 0.000000000001);
-      if(ketqua===undefined){
-        continue;
-      }
-      outputElement.innerText = `Nghiệm của phương trình là X= ${ketqua.toFixed(7)}`;
-      return;
-    
+function fitnessFunction(x) {
+  environment.X = x;
+  let result = evaluate(inputElement.value);
+  if (!result && result != 0) {
+    return 1000;
   }
-  outputElement.innerText = "Không tìm được nghiệm trong khoảng trên";
-}
+  return Math.abs(result);
 }
 
+// Generate initial population
+function generateInitialPopulation(populationSize) {
+  let population = [];
+  for (let i = 0; i < populationSize; i++) {
+    // Generate random solutions as initial population
+    population.push(value1 + Math.random() * (value2 - value1)); // Adjust the range according to your equation
+  }
+  return population;
+}
 
+// Selection: Choose parents based on fitness
+function selection(population) {
+  // Sort population based on fitness (ascending order)
+  population.sort((a, b) => fitnessFunction(a) - fitnessFunction(b));
+
+  // Select the best individuals as parents (can use different selection strategies)
+  return population.slice(0, count);
+}
+
+// Crossover: Breed new individuals from parents
+function crossover(parent1, parent2) {
+  // Simple averaging crossover
+  return (parent1 + parent2) / 2;
+}
+
+// Mutation: Introduce random changes to maintain diversity
+function mutation(individual) {
+  // Small random change
+  return individual + Math.random() * 0.000002 - 0.000001; // Adjust the range according to your problem
+}
+
+// Genetic algorith
+function geneticAlgorithm() {
+  const populationSize = 1000;
+  let population = generateInitialPopulation(populationSize);
+  let parent = selection(population);
+  const generations = 10;
+  for (let i = 0; i < generations; i++) {
+    for (let j = 0; j < count - 1; j++) {
+      for (let k = j + 1; k < count; k++) {
+        let x = crossover(parent[j], parent[k]);
+        x = mutation(x);
+        parent.push(x);
+      }
+    }
+    parent = selection(parent);
+  }
+  return parent[0];
+}
+
+submitBtn2.onclick = function caculatorX() {
+  outputElement.innerText = "Solving .......";
+  const result = geneticAlgorithm();
+  environment.X = result;
+
+  if (evaluate(inputElement.value) > 0.00000001) {
+    outputElement.innerText = "Không tìm được nghiệm trong khoảng trên";
+  } else {
+    outputElement.innerText = `Nghiệm của phương trình là X= ${result.toFixed(
+      6
+    )}`;
+  }
+};
