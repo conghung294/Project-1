@@ -32,29 +32,6 @@ body {
   padding: 0;
 }
 
-/* .block:focus,
-.block:hover {
-  transform: translate(2px, 2px);
-}
-
-.block:focus:after,
-.block:hover:after {
-  transform: translate(-2px, -3px);
-}
-
-.block:active {
-  color: var(--block-text-color);
-  transform: translate(3px, 3px);
-}
-
-.block:active:after {
-  transform: translate(-4px, -4px);
-}
-
-.block:focus {
-  outline: none;
-} */
-
 .block.fixed {
   cursor: auto !important;
 }
@@ -74,7 +51,7 @@ body {
 .container {
   margin: 0 auto;
   padding: 12px 15px;
-  max-width: 600px;
+  max-width: 650px;
 }
 
 h1 {

@@ -224,9 +224,8 @@ submitBtn.onclick = () => {
   }
   // && evaluate(inputElement.value) !== 0
   if (
-    evaluate(inputElement.value) === Infinity ||
-    evaluate(inputElement.value) === undefined ||
-    evaluate(inputElement.value) === NaN
+    !Number.isFinite(evaluate(inputElement.value)) ||
+    evaluate(inputElement.value) === undefined
   ) {
     outputElement.innerText = "Kiểm tra lại giá trị đầu vào";
   } else {
@@ -284,7 +283,7 @@ function geneticAlgorithm() {
   const populationSize = 500 + Math.round(Math.abs(value2 - value1));
   let population = generateInitialPopulation(populationSize);
   let parent = selection(population);
-  const generations = 10;
+
   let i = 0;
   while (fitnessFunction(parent[0]) > 1.0e-12) {
     i++;
@@ -297,7 +296,7 @@ function geneticAlgorithm() {
     }
     parent = selection(parent);
     outputElement.innerHTML = `${outputElement.innerHTML} Nghiệm tốt nhất thế hệ ${i} là ${parent[0]} <br/>`;
-    if (i === 30) {
+    if (i === 20) {
       break;
     }
   }
