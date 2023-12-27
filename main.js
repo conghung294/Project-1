@@ -222,8 +222,12 @@ submitBtn.onclick = () => {
   } else {
     environment.X = inputElement2.value * 1;
   }
-
-  if (!evaluate(inputElement.value) && evaluate(inputElement.value) != 0) {
+  // && evaluate(inputElement.value) !== 0
+  if (
+    evaluate(inputElement.value) === Infinity ||
+    evaluate(inputElement.value) === undefined ||
+    evaluate(inputElement.value) === NaN
+  ) {
     outputElement.innerText = "Kiểm tra lại giá trị đầu vào";
   } else {
     outputElement.innerText = `Giá trị của biểu thức là: ${evaluate(
@@ -261,32 +265,29 @@ function generateInitialPopulation(populationSize) {
 
 // Selection: Choose parents based on fitness
 function selection(population) {
-  // Sort population based on fitness (ascending order)
   population.sort((a, b) => fitnessFunction(a) - fitnessFunction(b));
-
-  // Select the best individuals as parents (can use different selection strategies)
   return population.slice(0, count);
 }
 
 // Crossover: Breed new individuals from parents
 function crossover(parent1, parent2) {
-  // Simple averaging crossover
   return (parent1 + parent2) / 2;
 }
 
 // Mutation: Introduce random changes to maintain diversity
 function mutation(individual) {
-  // Small random change
-  return individual + Math.random() * 0.000002 - 0.000001; // Adjust the range according to your problem
+  return individual + Math.random() * 0.000002 - 0.000001;
 }
 
 // Genetic algorith
 function geneticAlgorithm() {
-  const populationSize = 1000;
+  const populationSize = 500 + Math.round(Math.abs(value2 - value1));
   let population = generateInitialPopulation(populationSize);
   let parent = selection(population);
   const generations = 10;
-  for (let i = 0; i < generations; i++) {
+  let i = 0;
+  while (fitnessFunction(parent[0]) > 1.0e-12) {
+    i++;
     for (let j = 0; j < count - 1; j++) {
       for (let k = j + 1; k < count; k++) {
         let x = crossover(parent[j], parent[k]);
@@ -295,20 +296,24 @@ function geneticAlgorithm() {
       }
     }
     parent = selection(parent);
+    outputElement.innerHTML = `${outputElement.innerHTML} Nghiệm tốt nhất thế hệ ${i} là ${parent[0]} <br/>`;
+    if (i === 30) {
+      break;
+    }
   }
+
   return parent[0];
 }
 
 submitBtn2.onclick = function caculatorX() {
-  outputElement.innerText = "Solving .......";
-  const result = geneticAlgorithm();
-  environment.X = result;
+  outputElement.innerText = "";
 
-  if (evaluate(inputElement.value) > 0.00000001) {
-    outputElement.innerText = "Không tìm được nghiệm trong khoảng trên";
+  const result = geneticAlgorithm();
+
+  if (fitnessFunction(result) > 1.0e-3) {
+    outputElement.innerHTML = "Không tìm được nghiệm trong khoảng trên";
   } else {
-    outputElement.innerText = `Nghiệm của phương trình là X= ${result.toFixed(
-      6
-    )}`;
+    outputElement.innerHTML = `${outputElement.innerHTML} <br/> 
+  Vậy nghiệm của phương trình là ${result.toFixed(7)} <br/>`;
   }
 };

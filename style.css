@@ -101,7 +101,8 @@ input {
 }
 
 .output {
-  height: 250px;
+  height: fit-content;
+  min-height: 100px;
   padding: 10px;
   --block-background-color: #222;
   color: #ffffff;
