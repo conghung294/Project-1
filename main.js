@@ -257,7 +257,7 @@ function generateInitialPopulation(populationSize) {
   let population = [];
   for (let i = 0; i < populationSize; i++) {
     // Generate random solutions as initial population
-    population.push(value1 + Math.random() * (value2 - value1)); // Adjust the range according to your equation
+    population.push(value1 + Math.random() * (value2 - value1));
   }
   return population;
 }
