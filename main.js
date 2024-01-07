@@ -153,7 +153,7 @@ function operate(operator, stack) {
     case "+":
       return a + b;
     case "-": {
-      if (a === undefined) return 0 - b;
+      if (a === undefined || a === NaN) return 0 - b;
       return a - b;
     }
     case "*":
@@ -223,6 +223,7 @@ submitBtn.onclick = () => {
     environment.X = inputElement2.value * 1;
   }
   // && evaluate(inputElement.value) !== 0
+
   if (
     !Number.isFinite(evaluate(inputElement.value)) ||
     evaluate(inputElement.value) === undefined
